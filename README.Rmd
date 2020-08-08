@@ -21,23 +21,16 @@ A demonstration of scraping glassdoor reviews using `rvest`. Note that the under
 ```{r}
 source("R/scrape.R")
 
-# example urls, we'll go with Apple
+# example urls, we'll go with Google
 tesla_url <- "https://www.glassdoor.com/Reviews/Tesla-Reviews-E43129"
 apple_url <- "https://www.glassdoor.com/Reviews/Apple-Reviews-E1138"
+google_url <- "https://www.glassdoor.com/Reviews/Google-Reviews-E9079"
 
-# loop through n pages, wrap in try catch in case we fail to parse
-pages <- 2:4
-out <- lapply(pages, function(x) {
+# loop through n pages
+pages <- 1:5
+out <- lapply(pages, function(page) {
   Sys.sleep(1)
-  tryCatch({
-    scrape_reviews(
-      url = apple_url,
-      page = x
-    )
-  }, error = function(e) {
-    warning("Failed to parse page [", x, "]", call. = FALSE)
-    NULL
-  })
+  try_scrape_reviews(google_url, page)
 })
 
 # filter for stuff we successfully extracted

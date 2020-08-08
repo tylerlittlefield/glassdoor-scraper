@@ -11,34 +11,29 @@ A demonstration of scraping glassdoor reviews using `rvest`. Note that
 the underlying functions rely on xpath’s that I copied by simply
 clicking what I wanted and inspecting the element. These will probably
 change over time and consequently, the scripts will fail. As of
-2020-08-07, it seems to work pretty well.
+2020-08-08, it seems to work pretty well.
 
 ``` r
 source("R/scrape.R")
 #> Loading libraries...
 #> Sourcing functions...
 
-# example urls, we'll go with Apple
+# example urls, we'll go with Google
 tesla_url <- "https://www.glassdoor.com/Reviews/Tesla-Reviews-E43129"
 apple_url <- "https://www.glassdoor.com/Reviews/Apple-Reviews-E1138"
+google_url <- "https://www.glassdoor.com/Reviews/Google-Reviews-E9079"
 
-# loop through n pages, wrap in try catch in case we fail to parse
-pages <- 2:4
-out <- lapply(pages, function(x) {
+# loop through n pages
+pages <- 1:5
+out <- lapply(pages, function(page) {
   Sys.sleep(1)
-  tryCatch({
-    scrape_reviews(
-      url = apple_url,
-      page = x
-    )
-  }, error = function(e) {
-    warning("Failed to parse page [", x, "]", call. = FALSE)
-    NULL
-  })
+  try_scrape_reviews(google_url, page)
 })
-#> Scraping page [2] at [2020-08-07 20:10:10]
-#> Scraping page [3] at [2020-08-07 20:10:17]
-#> Scraping page [4] at [2020-08-07 20:10:20]
+#> Scraping page [1] at [2020-08-08 09:13:05]
+#> Scraping page [2] at [2020-08-08 09:13:14]
+#> Scraping page [3] at [2020-08-08 09:13:17]
+#> Scraping page [4] at [2020-08-08 09:13:20]
+#> Scraping page [5] at [2020-08-08 09:13:24]
 
 # filter for stuff we successfully extracted
 reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
@@ -61,17 +56,17 @@ reviews %>%
     employeer_rating
   ) %>% 
   glimpse()
-#> Rows: 30
+#> Rows: 50
 #> Columns: 9
 #> $ page             <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2…
-#> $ review_time      <dttm> 2020-08-05 08:36:23, 2020-08-05 10:35:38, 2020-08-0…
-#> $ review_time_raw  <chr> "Wed Aug 05 2020 08:36:23 GMT-0700 (Pacific Daylight…
-#> $ review_title     <chr> "Apple product Zone", "Even rewarding work needs to …
-#> $ employee_role    <chr> "Current Employee - Product Zone Specialist", "Curre…
-#> $ employee_history <chr> "I have been working at Apple part-time for less tha…
-#> $ employeer_pros   <chr> "This is a very great job if you are a people person…
-#> $ employeer_cons   <chr> "If you don't like people too much it won't be the b…
-#> $ employeer_rating <dbl> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
+#> $ review_time      <dttm> 2020-08-07 16:50:50, 2013-06-21 12:42:33, 2014-05-1…
+#> $ review_time_raw  <chr> "Fri Aug 07 2020 16:50:50 GMT-0700 (Pacific Daylight…
+#> $ review_title     <chr> "Great place to work!", "Moving at the speed of ligh…
+#> $ employee_role    <chr> "Current Employee - Software Engineer", "Former Empl…
+#> $ employee_history <chr> "I have been working at Google full-time for more th…
+#> $ employeer_pros   <chr> "Great perks, great salary, interesting problems, gr…
+#> $ employeer_cons   <chr> "Some long hours, but free dinners and lunches make …
+#> $ employeer_rating <dbl> 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
 ```
 
 ## Session Info
@@ -88,7 +83,7 @@ sessioninfo::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Los_Angeles         
-#>  date     2020-08-07                  
+#>  date     2020-08-08                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version date       lib source        

@@ -99,3 +99,15 @@ scrape_reviews <- function(url, page_number) {
     employeer_rating = employeer_rating
   )
 }
+
+try_scrape_reviews <- function(url, page) {
+  tryCatch({
+    scrape_reviews(
+      url = url,
+      page = page
+    )
+  }, error = function(e) {
+    warning("Failed to parse page [", page, "]", call. = FALSE)
+    NULL
+  })
+}
