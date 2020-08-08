@@ -1,0 +1,60 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# glassdoor-scraper
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+A demonstration of scraping glassdoor reviews using `rvest`.
+
+```{r}
+source("R/scrape.R")
+
+# example urls, we'll go with Apple
+tesla_url <- "https://www.glassdoor.com/Reviews/Tesla-Reviews-E43129"
+apple_url <- "https://www.glassdoor.com/Reviews/Apple-Reviews-E1138"
+
+# loop through n pages, wrap in try catch in case we fail to parse
+out <- lapply(2:3, function(x) {
+  tryCatch({
+    scrape_reviews(
+      url = apple_url,
+      page = x
+    )
+  }, error = function(e) {
+    warning("Failed to parse page [", x, "]", call. = FALSE)
+    NULL
+  })
+})
+
+# filter for stuff we successfully extracted
+reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
+
+reviews %>%
+  distinct() %>%
+  mutate(review_time = clean_review_datetime(review_time_raw)) %>%
+  select(
+    page,
+    review_time,
+    review_time_raw,
+    review_title,
+    employee_role,
+    employee_history,
+    employeer_pros,
+    employeer_cons,
+    employeer_rating
+  ) %>% 
+  glimpse()
+```
+
