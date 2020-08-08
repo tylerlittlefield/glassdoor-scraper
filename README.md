@@ -25,6 +25,7 @@ apple_url <- "https://www.glassdoor.com/Reviews/Apple-Reviews-E1138"
 # loop through n pages, wrap in try catch in case we fail to parse
 pages <- 2:4
 out <- lapply(pages, function(x) {
+  Sys.sleep(1)
   tryCatch({
     scrape_reviews(
       url = apple_url,
@@ -35,9 +36,9 @@ out <- lapply(pages, function(x) {
     NULL
   })
 })
-#> Scraping page [2] at [2020-08-07 20:01:26]
-#> Scraping page [3] at [2020-08-07 20:01:34]
-#> Scraping page [4] at [2020-08-07 20:01:36]
+#> Scraping page [2] at [2020-08-07 20:10:10]
+#> Scraping page [3] at [2020-08-07 20:10:17]
+#> Scraping page [4] at [2020-08-07 20:10:20]
 
 # filter for stuff we successfully extracted
 reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
