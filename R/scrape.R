@@ -91,7 +91,6 @@ scrape_reviews <- function(url, page_number) {
 
   tibble(
     review_time_raw = review_time,
-    # review_time = clean_review_datetime(review_time),
     review_title = review_title,
     employee_role = employee_role,
     employee_history = employee_history,

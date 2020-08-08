@@ -26,7 +26,8 @@ tesla_url <- "https://www.glassdoor.com/Reviews/Tesla-Reviews-E43129"
 apple_url <- "https://www.glassdoor.com/Reviews/Apple-Reviews-E1138"
 
 # loop through n pages, wrap in try catch in case we fail to parse
-out <- lapply(2:3, function(x) {
+pages <- 2:4
+out <- lapply(pages, function(x) {
   tryCatch({
     scrape_reviews(
       url = apple_url,
