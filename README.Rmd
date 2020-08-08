@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-A demonstration of scraping glassdoor reviews using `rvest`.
+A demonstration of scraping glassdoor reviews using `rvest`. Note that the underlying functions rely on xpath's that I copied by simply clicking what I wanted and inspecting the element. These will probably change over time and consequently, the scripts will fail. As of `r Sys.Date()`, it seems to work pretty well.
 
 ```{r}
 source("R/scrape.R")
@@ -56,5 +56,11 @@ reviews %>%
     employeer_rating
   ) %>% 
   glimpse()
+```
+
+## Session Info
+
+```{r}
+sessioninfo::session_info()
 ```
 
