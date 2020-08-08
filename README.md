@@ -34,15 +34,18 @@ out <- lapply(2:3, function(x) {
     NULL
   })
 })
-#> Scraping page [2] at [2020-08-07 19:55:27]
-#> Scraping page [3] at [2020-08-07 19:55:38]
+#> Scraping page [2] at [2020-08-07 19:57:38]
+#> Scraping page [3] at [2020-08-07 19:57:43]
 
 # filter for stuff we successfully extracted
 reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
 
 reviews %>%
   distinct() %>%
-  mutate(review_time = clean_review_datetime(review_time_raw)) %>%
+  mutate(
+    review_time = clean_review_datetime(review_time_raw),
+    page = as.numeric(page)
+  ) %>%
   select(
     page,
     review_time,
@@ -57,7 +60,7 @@ reviews %>%
   glimpse()
 #> Rows: 20
 #> Columns: 9
-#> $ page             <chr> "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "2…
+#> $ page             <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2…
 #> $ review_time      <dttm> 2020-08-06 15:55:43, 2020-08-05 08:36:23, 2020-08-0…
 #> $ review_time_raw  <chr> "Thu Aug 06 2020 15:55:43 GMT-0700 (Pacific Daylight…
 #> $ review_title     <chr> "Solid", "Apple product Zone", "Even rewarding work …

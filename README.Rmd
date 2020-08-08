@@ -43,7 +43,10 @@ reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
 
 reviews %>%
   distinct() %>%
-  mutate(review_time = clean_review_datetime(review_time_raw)) %>%
+  mutate(
+    review_time = clean_review_datetime(review_time_raw),
+    page = as.numeric(page)
+  ) %>%
   select(
     page,
     review_time,
