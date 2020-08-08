@@ -34,8 +34,8 @@ out <- lapply(2:3, function(x) {
     NULL
   })
 })
-#> Scraping page [2] at [2020-08-07 19:42:42]
-#> Scraping page [3] at [2020-08-07 19:42:45]
+#> Scraping page [2] at [2020-08-07 19:55:27]
+#> Scraping page [3] at [2020-08-07 19:55:38]
 
 # filter for stuff we successfully extracted
 reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
@@ -58,13 +58,13 @@ reviews %>%
 #> Rows: 20
 #> Columns: 9
 #> $ page             <chr> "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "2…
-#> $ review_time      <dttm> 2020-08-05 08:36:23, 2020-08-05 10:35:38, 2020-08-0…
-#> $ review_time_raw  <chr> "Wed Aug 05 2020 08:36:23 GMT-0700 (Pacific Daylight…
-#> $ review_title     <chr> "Apple product Zone", "Even rewarding work needs to …
-#> $ employee_role    <chr> "Current Employee - Product Zone Specialist", "Curre…
-#> $ employee_history <chr> "I have been working at Apple part-time for less tha…
-#> $ employeer_pros   <chr> "This is a very great job if you are a people person…
-#> $ employeer_cons   <chr> "If you don't like people too much it won't be the b…
+#> $ review_time      <dttm> 2020-08-06 15:55:43, 2020-08-05 08:36:23, 2020-08-0…
+#> $ review_time_raw  <chr> "Thu Aug 06 2020 15:55:43 GMT-0700 (Pacific Daylight…
+#> $ review_title     <chr> "Solid", "Apple product Zone", "Even rewarding work …
+#> $ employee_role    <chr> "Former Employee - AHA Advisor", "Current Employee -…
+#> $ employee_history <chr> "I worked at Apple full-time for more than 5 years",…
+#> $ employeer_pros   <chr> "The benefits are some of the best you'll find.", "T…
+#> $ employeer_cons   <chr> "No latter to climb. Customer service in general kin…
 #> $ employeer_rating <dbl> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
 ```
 
@@ -96,7 +96,7 @@ sessioninfo::session_info()
 #>  evaluate      0.14    2019-05-28 [1] CRAN (R 4.0.1)
 #>  fansi         0.4.1   2020-01-08 [1] CRAN (R 4.0.2)
 #>  generics      0.0.2   2018-11-29 [1] CRAN (R 4.0.2)
-#>  glue          1.4.1   2020-05-13 [1] CRAN (R 4.0.2)
+#>  glue        * 1.4.1   2020-05-13 [1] CRAN (R 4.0.2)
 #>  htmltools     0.5.0   2020-06-16 [1] CRAN (R 4.0.2)
 #>  httr          1.4.2   2020-07-20 [1] CRAN (R 4.0.2)
 #>  knitr         1.29    2020-06-23 [1] CRAN (R 4.0.2)
@@ -105,7 +105,7 @@ sessioninfo::session_info()
 #>  magrittr      1.5     2014-11-22 [1] CRAN (R 4.0.2)
 #>  pillar        1.4.6   2020-07-10 [1] CRAN (R 4.0.2)
 #>  pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 4.0.2)
-#>  purrr       * 0.3.4   2020-04-17 [1] CRAN (R 4.0.2)
+#>  purrr         0.3.4   2020-04-17 [1] CRAN (R 4.0.2)
 #>  R6            2.4.1   2019-11-12 [1] CRAN (R 4.0.2)
 #>  Rcpp          1.0.5   2020-07-06 [1] CRAN (R 4.0.2)
 #>  rlang         0.4.7   2020-07-09 [1] CRAN (R 4.0.2)
@@ -113,7 +113,7 @@ sessioninfo::session_info()
 #>  rvest       * 0.3.6   2020-07-25 [1] CRAN (R 4.0.2)
 #>  sessioninfo   1.1.1   2018-11-05 [1] CRAN (R 4.0.2)
 #>  stringi       1.4.6   2020-02-17 [1] CRAN (R 4.0.2)
-#>  stringr       1.4.0   2019-02-10 [1] CRAN (R 4.0.2)
+#>  stringr     * 1.4.0   2019-02-10 [1] CRAN (R 4.0.2)
 #>  tibble        3.0.3   2020-07-10 [1] CRAN (R 4.0.2)
 #>  tidyselect    1.1.0   2020-05-11 [1] CRAN (R 4.0.2)
 #>  utf8          1.1.4   2018-05-24 [1] CRAN (R 4.0.2)

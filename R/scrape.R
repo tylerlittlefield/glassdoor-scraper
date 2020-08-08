@@ -2,14 +2,15 @@ message("Loading libraries...")
 suppressPackageStartupMessages({
   library(rvest)
   library(xml2)
-  library(purrr)
   library(dplyr)
   library(lubridate)
+  library(glue)
+  library(stringr)
 })
 
 message("Sourcing functions...")
 read_page <- function(url, page) {
-  glue::glue("{url}_P{page}.htm") %>%
+  glue("{url}_P{page}.htm") %>%
     read_html()
 }
 
@@ -20,7 +21,7 @@ get_review_ids <- function(.data) {
 }
 
 get_review_datetime <- function(.data, review_id) {
-  x <- glue::glue('//*[@id="{review_id}"]/div/div[1]/div/time')
+  x <- glue('//*[@id="{review_id}"]/div/div[1]/div/time')
   .data %>%
     html_nodes(xpath = x) %>%
     html_attr("datetime")
@@ -32,43 +33,43 @@ clean_review_datetime <- function(x) {
 }
 
 get_review_title <- function(.data, review_id) {
-  x <- glue::glue('//*[@id="{review_id}"]/div/div[2]/div[2]/h2/a')
+  x <- glue('//*[@id="{review_id}"]/div/div[2]/div[2]/h2/a')
   .data %>%
     html_nodes(xpath = x) %>%
     html_text() %>%
-    stringr::str_remove_all(., '"')
+    str_remove_all(., '"')
 }
 
 get_employee_role <- function(.data, review_id) {
-  x <- glue::glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[2]/div/span/span[1]')
+  x <- glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[2]/div/span/span[1]')
   .data %>%
     html_nodes(xpath = x) %>%
     html_text()
 }
 
 get_employee_history <- function(.data, review_id) {
-  x <- glue::glue('//*[@id="{review_id}"]/div/div[2]/div[2]/p')
+  x <- glue('//*[@id="{review_id}"]/div/div[2]/div[2]/p')
   .data %>%
     html_nodes(xpath = x) %>%
     html_text()
 }
 
 get_employeer_pros <- function(.data, review_id) {
-  x <- glue::glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[4]/p[2]')
+  x <- glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[4]/p[2]')
   .data %>%
     html_nodes(xpath = x) %>%
     html_text()
 }
 
 get_employeer_cons <- function(.data, review_id) {
-  x <- glue::glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[5]/p[2]')
+  x <- glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[5]/p[2]')
   .data %>%
     html_nodes(xpath = x) %>%
     html_text()
 }
 
 get_overall_rating <- function(.data, review_id) {
-  x <- glue::glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[1]/span/div[1]/div/div')
+  x <- glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[1]/span/div[1]/div/div')
   .data %>%
     html_nodes(xpath = x) %>%
     html_text() %>%
@@ -88,7 +89,7 @@ scrape_reviews <- function(url, page_number) {
   employeer_cons <- unlist(lapply(review_ids, get_employeer_cons, .data = page))
   employeer_rating <- unlist(lapply(review_ids, get_overall_rating, .data = page))
 
-  tibble::tibble(
+  tibble(
     review_time_raw = review_time,
     # review_time = clean_review_datetime(review_time),
     review_title = review_title,
