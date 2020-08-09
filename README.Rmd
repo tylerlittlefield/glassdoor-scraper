@@ -45,6 +45,7 @@ reviews %>%
   ) %>% 
   select(
     page,
+    review_id,
     review_time_raw,
     review_time,
     review_title,
