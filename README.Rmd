@@ -57,8 +57,7 @@ reviews %>%
     culture_values,
     career_opportunities,
     compensation_and_benefits,
-    senior_management,
-    review_time
+    senior_management
   ) %>% 
   glimpse()
 ```

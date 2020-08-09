@@ -29,11 +29,11 @@ out <- lapply(pages, function(page) {
   Sys.sleep(1)
   try_scrape_reviews(google_url, page)
 })
-#> Scraping page [1] at [2020-08-09 11:42:04]
-#> Scraping page [2] at [2020-08-09 11:42:09]
-#> Scraping page [3] at [2020-08-09 11:42:14]
-#> Scraping page [4] at [2020-08-09 11:42:19]
-#> Scraping page [5] at [2020-08-09 11:42:24]
+#> Scraping page [1] at [2020-08-09 12:21:15]
+#> Scraping page [2] at [2020-08-09 12:21:20]
+#> Scraping page [3] at [2020-08-09 12:21:25]
+#> Scraping page [4] at [2020-08-09 12:21:30]
+#> Scraping page [5] at [2020-08-09 12:21:35]
 
 # filter for stuff we successfully extracted
 reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
@@ -59,8 +59,7 @@ reviews %>%
     culture_values,
     career_opportunities,
     compensation_and_benefits,
-    senior_management,
-    review_time
+    senior_management
   ) %>% 
   glimpse()
 #> Rows: 50
@@ -74,11 +73,11 @@ reviews %>%
 #> $ employeer_pros            <chr> "Solving problems for the whole globe. Fant…
 #> $ employeer_cons            <chr> "Company became huge! Lots of policies!", "…
 #> $ employeer_rating          <dbl> 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
-#> $ work_life_balance         <dbl> 5, 2, 5, 5, NA, 5, 4, 4, 4, 3, 3, NA, NA, 5…
-#> $ culture_values            <dbl> 5, 3, 4, 5, NA, 5, 4, 4, 5, 5, 5, NA, NA, 5…
-#> $ career_opportunities      <dbl> 5, 3, 5, 5, NA, 5, 3, 5, 5, 4, 4, NA, NA, 5…
-#> $ compensation_and_benefits <dbl> 4, 5, 5, 5, NA, 5, 5, 5, 4, 5, 5, NA, NA, 5…
-#> $ senior_management         <dbl> 3, 3, 4, 5, NA, 5, 4, 3, 4, 4, 4, NA, NA, 5…
+#> $ work_life_balance         <dbl> 5, 2, 5, 5, NA, 5, 5, 4, 4, 4, 3, NA, NA, 5…
+#> $ culture_values            <dbl> 5, 3, 4, 5, NA, 5, 5, 4, 4, 5, 5, NA, NA, 5…
+#> $ career_opportunities      <dbl> 5, 3, 5, 5, NA, 5, 5, 3, 5, 5, 4, NA, NA, 5…
+#> $ compensation_and_benefits <dbl> 4, 5, 5, 5, NA, 5, 5, 5, 5, 4, 5, NA, NA, 5…
+#> $ senior_management         <dbl> 3, 3, 4, 5, NA, 5, 5, 4, 3, 4, 4, NA, NA, 5…
 ```
 
 ## Session Info
@@ -112,7 +111,7 @@ sessioninfo::session_info()
 #>  glue        * 1.4.1   2020-05-13 [1] CRAN (R 4.0.2)
 #>  htmltools     0.5.0   2020-06-16 [1] CRAN (R 4.0.2)
 #>  httr          1.4.2   2020-07-20 [1] CRAN (R 4.0.2)
-#>  janitor       2.0.1   2020-04-12 [1] CRAN (R 4.0.2)
+#>  janitor     * 2.0.1   2020-04-12 [1] CRAN (R 4.0.2)
 #>  knitr         1.29    2020-06-23 [1] CRAN (R 4.0.2)
 #>  lifecycle     0.2.0   2020-03-06 [1] CRAN (R 4.0.2)
 #>  lubridate   * 1.7.9   2020-06-08 [1] CRAN (R 4.0.2)
