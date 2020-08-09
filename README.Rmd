@@ -36,22 +36,29 @@ out <- lapply(pages, function(page) {
 # filter for stuff we successfully extracted
 reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
 
+# remove any duplicates, parse the review time
 reviews %>%
   distinct() %>%
   mutate(
     review_time = clean_review_datetime(review_time_raw),
     page = as.numeric(page)
-  ) %>%
+  ) %>% 
   select(
     page,
-    review_time,
     review_time_raw,
+    review_time,
     review_title,
     employee_role,
     employee_history,
     employeer_pros,
     employeer_cons,
-    employeer_rating
+    employeer_rating,
+    work_life_balance,
+    culture_values,
+    career_opportunities,
+    compensation_and_benefits,
+    senior_management,
+    review_time
   ) %>% 
   glimpse()
 ```

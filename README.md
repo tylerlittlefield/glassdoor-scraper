@@ -11,7 +11,7 @@ A demonstration of scraping glassdoor reviews using `rvest`. Note that
 the underlying functions rely on xpath’s that I copied by simply
 clicking what I wanted and inspecting the element. These will probably
 change over time and consequently, the scripts will fail. As of
-2020-08-08, it seems to work pretty well.
+2020-08-09, it seems to work pretty well.
 
 ``` r
 source("R/scrape.R")
@@ -29,44 +29,56 @@ out <- lapply(pages, function(page) {
   Sys.sleep(1)
   try_scrape_reviews(google_url, page)
 })
-#> Scraping page [1] at [2020-08-08 09:13:05]
-#> Scraping page [2] at [2020-08-08 09:13:14]
-#> Scraping page [3] at [2020-08-08 09:13:17]
-#> Scraping page [4] at [2020-08-08 09:13:20]
-#> Scraping page [5] at [2020-08-08 09:13:24]
+#> Scraping page [1] at [2020-08-09 11:42:04]
+#> Scraping page [2] at [2020-08-09 11:42:09]
+#> Scraping page [3] at [2020-08-09 11:42:14]
+#> Scraping page [4] at [2020-08-09 11:42:19]
+#> Scraping page [5] at [2020-08-09 11:42:24]
 
 # filter for stuff we successfully extracted
 reviews <- bind_rows(Filter(Negate(is.null), out), .id = "page")
 
+# remove any duplicates, parse the review time
 reviews %>%
   distinct() %>%
   mutate(
     review_time = clean_review_datetime(review_time_raw),
     page = as.numeric(page)
-  ) %>%
+  ) %>% 
   select(
     page,
-    review_time,
     review_time_raw,
+    review_time,
     review_title,
     employee_role,
     employee_history,
     employeer_pros,
     employeer_cons,
-    employeer_rating
+    employeer_rating,
+    work_life_balance,
+    culture_values,
+    career_opportunities,
+    compensation_and_benefits,
+    senior_management,
+    review_time
   ) %>% 
   glimpse()
 #> Rows: 50
-#> Columns: 9
-#> $ page             <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2…
-#> $ review_time      <dttm> 2020-08-07 16:50:50, 2013-06-21 12:42:33, 2014-05-1…
-#> $ review_time_raw  <chr> "Fri Aug 07 2020 16:50:50 GMT-0700 (Pacific Daylight…
-#> $ review_title     <chr> "Great place to work!", "Moving at the speed of ligh…
-#> $ employee_role    <chr> "Current Employee - Software Engineer", "Former Empl…
-#> $ employee_history <chr> "I have been working at Google full-time for more th…
-#> $ employeer_pros   <chr> "Great perks, great salary, interesting problems, gr…
-#> $ employeer_cons   <chr> "Some long hours, but free dinners and lunches make …
-#> $ employeer_rating <dbl> 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
+#> Columns: 14
+#> $ page                      <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2…
+#> $ review_time_raw           <chr> "Sat Aug 08 2020 14:43:36 GMT-0700 (Pacific…
+#> $ review_time               <dttm> 2020-08-08 14:43:36, 2013-06-21 12:42:33, …
+#> $ review_title              <chr> "It’s still Google!", "Moving at the speed …
+#> $ employee_role             <chr> "Current Employee - Somewhere In IT", "Form…
+#> $ employee_history          <chr> "I have been working at Google full-time", …
+#> $ employeer_pros            <chr> "Solving problems for the whole globe. Fant…
+#> $ employeer_cons            <chr> "Company became huge! Lots of policies!", "…
+#> $ employeer_rating          <dbl> 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
+#> $ work_life_balance         <dbl> 5, 2, 5, 5, NA, 5, 4, 4, 4, 3, 3, NA, NA, 5…
+#> $ culture_values            <dbl> 5, 3, 4, 5, NA, 5, 4, 4, 5, 5, 5, NA, NA, 5…
+#> $ career_opportunities      <dbl> 5, 3, 5, 5, NA, 5, 3, 5, 5, 4, 4, NA, NA, 5…
+#> $ compensation_and_benefits <dbl> 4, 5, 5, 5, NA, 5, 5, 5, 4, 5, 5, NA, NA, 5…
+#> $ senior_management         <dbl> 3, 3, 4, 5, NA, 5, 4, 3, 4, 4, 4, NA, NA, 5…
 ```
 
 ## Session Info
@@ -83,7 +95,7 @@ sessioninfo::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Los_Angeles         
-#>  date     2020-08-08                  
+#>  date     2020-08-09                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version date       lib source        
@@ -100,6 +112,7 @@ sessioninfo::session_info()
 #>  glue        * 1.4.1   2020-05-13 [1] CRAN (R 4.0.2)
 #>  htmltools     0.5.0   2020-06-16 [1] CRAN (R 4.0.2)
 #>  httr          1.4.2   2020-07-20 [1] CRAN (R 4.0.2)
+#>  janitor       2.0.1   2020-04-12 [1] CRAN (R 4.0.2)
 #>  knitr         1.29    2020-06-23 [1] CRAN (R 4.0.2)
 #>  lifecycle     0.2.0   2020-03-06 [1] CRAN (R 4.0.2)
 #>  lubridate   * 1.7.9   2020-06-08 [1] CRAN (R 4.0.2)
@@ -113,9 +126,11 @@ sessioninfo::session_info()
 #>  rmarkdown     2.3     2020-06-18 [1] CRAN (R 4.0.2)
 #>  rvest       * 0.3.6   2020-07-25 [1] CRAN (R 4.0.2)
 #>  sessioninfo   1.1.1   2018-11-05 [1] CRAN (R 4.0.2)
+#>  snakecase     0.11.0  2019-05-25 [1] CRAN (R 4.0.2)
 #>  stringi       1.4.6   2020-02-17 [1] CRAN (R 4.0.2)
 #>  stringr     * 1.4.0   2019-02-10 [1] CRAN (R 4.0.2)
 #>  tibble        3.0.3   2020-07-10 [1] CRAN (R 4.0.2)
+#>  tidyr       * 1.1.1   2020-07-31 [1] CRAN (R 4.0.2)
 #>  tidyselect    1.1.0   2020-05-11 [1] CRAN (R 4.0.2)
 #>  utf8          1.1.4   2018-05-24 [1] CRAN (R 4.0.2)
 #>  vctrs         0.3.2   2020-07-15 [1] CRAN (R 4.0.2)

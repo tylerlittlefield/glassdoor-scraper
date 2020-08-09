@@ -6,6 +6,8 @@ suppressPackageStartupMessages({
   library(lubridate)
   library(glue)
   library(stringr)
+  library(tidyr)
+  library(janitor)
 })
 
 message("Sourcing functions...")
@@ -76,6 +78,40 @@ get_overall_rating <- function(.data, review_id) {
     as.numeric()
 }
 
+get_sub_ratings <- function(.data, review_id) {
+  out <- lapply(1:5, function(x) {
+    subcategory <- .data %>%
+      html_nodes(xpath = glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[1]/span/div[2]/ul/li[{x}]/div')) %>%
+      html_text()
+
+    rating <- .data %>%
+      html_nodes(xpath = glue('//*[@id="{review_id}"]/div/div[2]/div[2]/div[1]/span/div[2]/ul/li[{x}]/span/span/span/span')) %>%
+      html_attr("title") %>%
+      as.numeric()
+
+    tibble(subcategory = subcategory, rating = rating)
+  })
+
+  no_sub_ratings <- sum(unlist(Map(nrow, out))) == 0
+  if (no_sub_ratings) {
+    tibble(
+      "work_life_balance" = NA_real_,
+      "culture_values" = NA_real_,
+      "career_opportunities" = NA_real_,
+      "compensation_and_benefits" = NA_real_,
+      "senior_management" = NA_real_
+    )
+  } else {
+    out %>%
+      bind_rows() %>%
+      pivot_wider(
+        names_from = subcategory,
+        values_from = rating
+      ) %>%
+      clean_names("snake")
+  }
+}
+
 scrape_reviews <- function(url, page_number) {
   message("Scraping page [", page_number, "] at [", Sys.time(), "]")
   page <- read_page(url, page_number)
@@ -88,8 +124,11 @@ scrape_reviews <- function(url, page_number) {
   employeer_pros <- unlist(lapply(review_ids, get_employeer_pros, .data = page))
   employeer_cons <- unlist(lapply(review_ids, get_employeer_cons, .data = page))
   employeer_rating <- unlist(lapply(review_ids, get_overall_rating, .data = page))
+  subcategories <- bind_rows(lapply(review_ids, function(x) {
+    get_sub_ratings(page, x)
+  }))
 
-  tibble(
+  bind_cols(tibble(
     review_time_raw = review_time,
     review_title = review_title,
     employee_role = employee_role,
@@ -97,7 +136,7 @@ scrape_reviews <- function(url, page_number) {
     employeer_pros = employeer_pros,
     employeer_cons = employeer_cons,
     employeer_rating = employeer_rating
-  )
+  ), subcategories)
 }
 
 try_scrape_reviews <- function(url, page) {
