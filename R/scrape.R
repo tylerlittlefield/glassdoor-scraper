@@ -129,6 +129,7 @@ scrape_reviews <- function(url, page_number) {
   }))
 
   bind_cols(tibble(
+    review_id = review_ids,
     review_time_raw = review_time,
     review_title = review_title,
     employee_role = employee_role,
